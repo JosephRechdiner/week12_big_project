@@ -4,11 +4,10 @@ import os
 
 MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
 MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
-MONGO_INITDB_DATABASE = os.getenv("MONGO_INITDB_DATABASE")
 MONGO_HOST =  os.getenv("MONGO_HOST")
 MONGO_PORT = os.getenv("MONGO_PORT")
 
-class Mongo:
+class MongoManager:
     def __init__(self):
         self.config = {
             "host": MONGO_HOST,
@@ -17,10 +16,10 @@ class Mongo:
             "password": MONGO_INITDB_ROOT_PASSWORD,
         }
 
-    def get_connection(self):
+    def get_client(self):
         try:
-            connection = MongoClient(**self.config)
-            return connection
+            client = MongoClient(**self.config)
+            return client
         except ConnectionFailure as e:
             print(f"Connection failed! {e}")
 
