@@ -1,6 +1,3 @@
 .venv/
 data/
-__pycache__
-Dockerignore
-docker-compose
-requirements.txt
+__pycache__/
