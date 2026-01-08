@@ -8,9 +8,12 @@ def read_json():
     for filename in os.listdir(PATH):
         # every file in this dir has a different path
         full_path = f"{PATH}{filename}"
-        with open(full_path, "r") as file:
-            json_data = json.load(file)
-            all_json_list.append(json_data)
+        try:
+            with open(full_path, "r") as file:
+                json_data = json.load(file)
+                all_json_list.append(json_data)
+        except json.JSONDecodeError as e:
+            print(f"Error: Failed to decode json file {e}")
 
     # making the data one big list[dict] (every json file is a list[dict])
     simplefied_json = simplefy_multiple_json(all_json_list)
@@ -19,6 +22,6 @@ def read_json():
 def simplefy_multiple_json(json_files: list[list]):
     result = []
     for json_file in json_files:
-        for event in  json_file:
+        for event in json_file:
             result.append(event)
-    return result   
+    return result
