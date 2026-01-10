@@ -34,8 +34,10 @@ class MongoManager:
         except ConnectionFailure as e:
             raise ConnectionError(f"MongoDB connection failed: {e}")
 
-    def get_conn(self) -> MongoClient:
+    def get_client(self) -> MongoClient:
         return self.client
 
+    def get_close(self):
+        return self.client.close()
 
      
