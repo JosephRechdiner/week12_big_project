@@ -5,6 +5,9 @@ from routes.browser_routes import browser_router
 from db.connector import MongoManager
 from constants import DATA_PATH
 
+
+from routes.browser_routes import browser_router
+from db.connector import MongoManager
 app = FastAPI()
 
 @app.on_event("startup")

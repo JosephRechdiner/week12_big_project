@@ -26,5 +26,3 @@ if __name__ == '__main__':
     print(a.a)
 
     print(b._num)
-
-print('Default data loading'.upper())
