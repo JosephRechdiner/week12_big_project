@@ -1,27 +1,41 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import os
+import threading
 
-MONGO_INITDB_ROOT_USERNAME = os.getenv("MONGO_INITDB_ROOT_USERNAME")
-MONGO_INITDB_ROOT_PASSWORD = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
-MONGO_INITDB_DATABASE = os.getenv("MONGO_INITDB_DATABASE")
-MONGO_HOST =  os.getenv("MONGO_HOST")
-MONGO_PORT = int(os.getenv("MONGO_PORT"))
 
 class MongoManager:
+    _instance = None
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        if not cls._instance:
+            with cls._lock:
+                if not cls._instance:
+                    cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        self.config = {
-            "host": MONGO_HOST,
-            "port": MONGO_PORT,
-            "username": MONGO_INITDB_ROOT_USERNAME,
-            "password": MONGO_INITDB_ROOT_PASSWORD,
-        }
+        if hasattr(self, "client"):
+            return  
 
-    def get_client(self):
+        self.client = MongoClient(
+            host=os.getenv("MONGO_HOST", "localhost"),
+            port=int(os.getenv("MONGO_PORT", 27017)),
+            username=os.getenv("MONGO_INITDB_ROOT_USERNAME"),
+            password=os.getenv("MONGO_INITDB_ROOT_PASSWORD"),        
+        )
+
+        # self.db_name = os.getenv("MONGO_INITDB_DATABASE")
+
         try:
-            client = MongoClient(**self.config)
-            return client
+            self.client.admin.command("ping")
+            print("MongoDB connected")
         except ConnectionFailure as e:
-            print(f"Connection failed! {e}")
+            raise ConnectionError(f"MongoDB connection failed: {e}")
 
-         
+    def get_conn(self) -> MongoClient:
+        return self.client
+
+
+     
