@@ -26,8 +26,6 @@ class MongoManager:
             password=os.getenv("MONGO_INITDB_ROOT_PASSWORD"),        
         )
 
-        # self.db_name = os.getenv("MONGO_INITDB_DATABASE")
-
         try:
             self.client.admin.command("ping")
             print("MongoDB connected")

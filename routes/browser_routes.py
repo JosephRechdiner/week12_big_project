@@ -19,8 +19,8 @@ def get_events_from_db(client = Depends(MONGO.get_client)):
     return EventsDal.get_events(client)
 
 
-@browser_router.get("/events/load_external_data")
-def get_events_from_db(url: str | None  = None, params: str | None = Query(None),
+@browser_router.post("/events/load_external_data")
+def load_events_to_json(url: str | None  = None, params: str | None = Query(None),
                        loader: ExternalDataLoader = Depends(get_loader)
 ):
     try:
