@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Optional
 import json
 
 from db.connector import MongoManager
-from dal.queries import EventsDal
+from service.events_service import EventsService
 from services.external_api_service import ExternalDataLoader, get_loader
 
 browser_router = APIRouter()
@@ -12,11 +11,11 @@ MONGO = MongoManager()
 
 @browser_router.get("/events/load_db")
 def load_events_to_db(client = Depends(MONGO.get_client)):
-    return EventsDal.add_events(client)
+    return EventsService.add_events_service(client)
 
 @browser_router.get("/events/read_db")
 def get_events_from_db(client = Depends(MONGO.get_client)):
-    return EventsDal.get_events(client)
+    return EventsService.get_events_service(client)
 
 
 @browser_router.get("/events/load_external_data")
