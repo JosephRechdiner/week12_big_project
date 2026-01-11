@@ -8,10 +8,12 @@ class EventsDal:
     @staticmethod
     def add_events(client):
         data = read_json()
-        db = client[MONGO_INITDB_DATABASE]
-        collection = db[COLLECTION]
-        collection.insert_many(data)
-        return {"msg": "Data inserted!"}
+        if data:
+            db = client[MONGO_INITDB_DATABASE]
+            collection = db[COLLECTION]
+            collection.insert_many(data)
+            return {"msg": "Data inserted!"}
+        return {"msg": "No data available"}
 
     @staticmethod
     def get_events(client):
